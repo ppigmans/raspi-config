@@ -3,10 +3,17 @@
 #
 # See LICENSE file for copyright and license details
 
+shell=$(lsb_release -a | sed 'N;s/\n/ /;N;s/\n/ /' | awk '{ print $5,$6,$7}' | sed 'N;s/\n/ /;N;s/\n/ /')
+
 INTERACTIVE=True
 ASK_TO_REBOOT=0
 BLACKLIST=/etc/modprobe.d/raspi-blacklist.conf
+
+if echo "$shell" | grep -q "Ubuntu"; then
+CONFIG=/boot/firmware/config.txt
+else
 CONFIG=/boot/config.txt
+fi
 
 is_pione() {
    if grep -q "^Revision\s*:\s*00[0-9a-fA-F][0-9a-fA-F]$" /proc/cpuinfo; then
